@@ -15,11 +15,7 @@
             background-color: #000;
             color: white;
             font-family: Arial, sans-serif;
-        }
-
-        #normal {
-            width: 300px;
-            cursor: pointer;
+            overflow: hidden; /* Чтобы видео не выходило за пределы экрана */
         }
 
         #screamer {
@@ -28,33 +24,41 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: none;
+            display: block; /* Показываем видео */
+            object-fit: cover; /* Растягиваем видео на весь экран */
             z-index: 10;
         }
 
         #sound {
-            display: none;
-        }
-
-        .message {
-            font-size: 24px;
-            margin-bottom: 20px;
+            display: block; /* Сразу показываем звук */
         }
     </style>
 </head>
 <body>
-    <div class="message">Добро пожаловать на мой сайт, дорогой друг!</div>
-    <div class="message">Нажми на Губку Боба, чтобы посмотреть дальше.</div>
-    <img id="normal" src="normal.jpg" alt="Обычное изображение" onclick="showScreamer()">
-    <img id="screamer" src="screamer.jpg" alt="Скример">
-    <audio id="sound" src="scream.ogg"></audio>
+    <!-- Видео вместо GIF -->
+    <video id="screamer" autoplay muted loop>
+        <source src="assets/furry_gif.mp4" type="video/mp4">
+        Ваш браузер не поддерживает элемент video.
+    </video>
+
+    <!-- Аудио файл -->
+    <audio id="sound" src="audio/scream.mp3"></audio>
 
     <script>
-        function showScreamer() {
-            document.getElementById('normal').style.display = 'none'; // скрыть обычное изображение
-            document.getElementById('screamer').style.display = 'block'; // показать скример
-            document.getElementById('sound').play(); // проиграть звук
-        }
+        let soundPlayed = false; // Переменная для проверки, чтобы звук проигрывался только один раз
+
+        // Добавляем обработчик события на движение мыши
+        window.addEventListener('mousemove', function() {
+            if (!soundPlayed) {
+                const sound = document.getElementById('sound');
+                sound.play().then(() => {
+                    soundPlayed = true; // Звук проигран, больше не будем повторно запускать
+                    document.getElementById('screamer').style.display = 'block'; // Показываем видео
+                }).catch((error) => {
+                    console.error('Ошибка воспроизведения звука:', error);
+                });
+            }
+        });
     </script>
 </body>
 </html>
