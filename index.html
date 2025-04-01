@@ -15,7 +15,7 @@
             background-color: #000;
             color: white;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Чтобы видео не выходило за пределы экрана */
+            overflow: hidden;
         }
 
         #screamer {
@@ -24,36 +24,47 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: block; /* Показываем видео */
-            object-fit: cover; /* Растягиваем видео на весь экран */
+            display: none; /* Скрываем видео по умолчанию */
+            object-fit: cover;
             z-index: 10;
         }
 
         #sound {
-            display: block; /* Сразу показываем звук */
+            display: none; /* Скрываем элемент звука */
         }
     </style>
 </head>
 <body>
     <!-- Видео вместо GIF -->
     <video id="screamer" autoplay muted loop>
-        <source src="assets/furry_gif.mp4" type="video/mp4">
+        <source src="furry_gif.mp4" type="video/mp4">
         Ваш браузер не поддерживает элемент video.
     </video>
 
     <!-- Аудио файл -->
-    <audio id="sound" src="audio/scream.mp3"></audio>
+    <audio id="sound" src="scream.mp3"></audio>
 
     <script>
-        let soundPlayed = false; // Переменная для проверки, чтобы звук проигрывался только один раз
+        let soundPlayed = false;
 
-        // Добавляем обработчик события на движение мыши
+        window.addEventListener('load', function() {
+            // Инициализация звука и видео сразу при загрузке
+            const sound = document.getElementById('sound');
+            const video = document.getElementById('screamer');
+            
+            sound.play().catch((error) => {
+                console.error('Ошибка воспроизведения звука:', error);
+            });
+
+            video.style.display = 'block'; // Показываем видео сразу
+        });
+
+        // Можете оставить обработчик на движение мыши для повторного воспроизведения
         window.addEventListener('mousemove', function() {
             if (!soundPlayed) {
                 const sound = document.getElementById('sound');
                 sound.play().then(() => {
-                    soundPlayed = true; // Звук проигран, больше не будем повторно запускать
-                    document.getElementById('screamer').style.display = 'block'; // Показываем видео
+                    soundPlayed = true;
                 }).catch((error) => {
                     console.error('Ошибка воспроизведения звука:', error);
                 });
